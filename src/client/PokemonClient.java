@@ -1,6 +1,7 @@
 package client;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
@@ -49,9 +50,31 @@ public class PokemonClient implements Serializable{
 	
 	public void findPokemon() {
 		try {
+			conn.setDoOutput(true);
+		    conn.setDoInput(true);
 			conn.setRequestMethod("GET");
 			OutputStream out = conn.getOutputStream();
 			Writer wr = new OutputStreamWriter(out);
+			
+			wr.write("<?xml version=\"1.0\"?>");
+			wr.write("<soap:Envelope");
+			wr.write("xmlns:soap=\"http://www.w3.org/2001/12/soap-envelope");
+			wr.write("soap:encodingStyle=\"http://www.w3.org/2001/12/soap-encoding\">");
+			wr.write("<soap:Body xmlns:m=\"http://www.example.org/stock\">");
+			wr.write("<m:GetPokemonName>");
+			wr.write(getId());
+			wr.write("</m:GetPokemonName>");
+			wr.write("</soap:Body>");
+			wr.write("</soap:Envelope>");
+			wr.flush();
+		    wr.close();
+		    
+		    InputStream in = conn.getInputStream();
+		    setName("");
+		    int x;
+		    while ((x = in.read()) != -1)
+		    	name += (char)x+"";
+		    in.close();
 		} 
 		catch (ProtocolException e) {
 			e.printStackTrace();

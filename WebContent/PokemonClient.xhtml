@@ -13,10 +13,12 @@
 			<h:outputLabel value="ID: " />
 			<h:inputText id="idInputText" value="#{pokemonClient.id}">
 			</h:inputText>
-			<h:commandButton value="Who's that Pokemon?" action="submit"/>
+			<h:commandButton value="Who's that Pokemon?" action="#{pokemonClient.findPokemon()}"/>
 		</h:panelGrid>
 	</h:form>
 	<br/>
-	#{pokemonClient.status()}
+	#{pokemonClient.name}
+	<br/>
+	#{pokemonClient.status}
 </h:body> 
 </html>
